@@ -37,7 +37,6 @@ router.post('/update', function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
-  console.log(req.body);
   if (req.body.username != null && req.body.password != null) {
     var query = { Username: req.body.username, Password: req.body.password };
     req.db.collection("user").findOne(query, function (err, result) {
