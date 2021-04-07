@@ -44,15 +44,18 @@ router.post('/login', function (req, res, next) {
     var query = { username: req.body.username, password: req.body.password };
     req.db.collection("user").findOne(query, function (err, result) {
       if (err)
-        res.json({});
+        res.json([]);
       else {
         console.log(result);
         if (result != null && req.body.username == result.username && req.body.password == result.password) {
           delete result.password;
           res.json(result);
-        } else res.json({});
+        } else res.json([]);
+        ;
       }
     });
-  } else res.json({});
+  } else res.json([]);
+  ;
 });
+
 module.exports = router;

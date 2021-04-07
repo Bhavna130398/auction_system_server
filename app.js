@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+app.use(cors());
 
 
 // view engine setup
@@ -23,9 +24,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressMongoDb('mongodb://localhost/auctionDB'));
 
-app.use(cors());
-
-app.use('/', indexRouter);
+// app.use('/', {
+//   setHeaders: function setHeaders(res, path, stat) {
+//     //Allow all origins.
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Methods', 'GET,POST');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//   }
+// });
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
@@ -35,6 +41,7 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+  app.use('/', indexRouter);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
