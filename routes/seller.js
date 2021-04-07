@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/add', function (req, res, next) {
     var obj = req.body;
-    req.db.collection("bidder").insertOne(obj, function (err, r) {
+    req.db.collection("seller").insertOne(obj, function (err, r) {
         if (err) {
             res.json({ ack: false });
         }
@@ -25,7 +25,7 @@ router.post('/update', function (req, res, next) {
         delete obj._id;
         var myquery = { _id: _id };
         var newvalues = { $set: obj };
-        req.db.collection("bidder").updateOne(myquery, newvalues, function (err, r) {
+        req.db.collection("seller").updateOne(myquery, newvalues, function (err, r) {
             if (err)
                 res.json({ ack: false });
             else

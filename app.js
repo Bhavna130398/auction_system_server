@@ -8,6 +8,7 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var productRouter = require('./routes/product');
 
 var app = express();
 app.use(cors());
@@ -33,6 +34,7 @@ app.use(expressMongoDb('mongodb://localhost/auctionDB'));
 //   }
 // });
 app.use('/users', usersRouter);
+app.use('/product', productRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
