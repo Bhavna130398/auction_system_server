@@ -10,10 +10,9 @@ router.get('/', function (req, res, next) {
 
 
 router.post('/addProduct', function (req, res, next) {
-    // var body = req.body.image;
-    // base64Data = body.replace(/^data:image\/jpeg;base64,/, "");
-    // delete req.body.image
-    // var obj = req.body;
+    var body = req.body.image;
+    base64Data = body.replace(/^data:image\/jpeg;base64,/, "");
+    delete req.body.image
     var obj = req.body;
     req.db.collection("product").insertOne(obj, function (err, r) {
         if (err) {

@@ -10,6 +10,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productRouter = require('./routes/product');
 var adminRouter = require('./routes/admin');
+var bidderRouter = require('./routes/bidder');
+var sellerRouter = require('./routes/seller');
 
 var app = express();
 app.use(cors());
@@ -37,6 +39,8 @@ app.use(expressMongoDb('mongodb://localhost/auctionDB'));
 app.use('/users', usersRouter);
 app.use('/product', productRouter);
 app.use('/admin', adminRouter);
+app.use('/bidder', bidderRouter);
+app.use('/seller', sellerRouter);
 
 
 // catch 404 and forward to error handler

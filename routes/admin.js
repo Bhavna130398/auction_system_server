@@ -8,8 +8,9 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.get('/bidderList', function (req, res, next) {
-    req.db.collection("bidder").findOne({}, function (err, result) {
+router.post('/bidderList', function (req, res, next) {
+    var query = { type: "bidder" };
+    req.db.collection("user").find(query).toArray(function (err, result) {
         if (err)
             res.json({});
         else {
@@ -19,10 +20,13 @@ router.get('/bidderList', function (req, res, next) {
     });
 });
 
-router.get('/sellerList', function (req, res, next) {
-    req.db.collection("seller").findOne({}, function (err, result) {
-        if (err)
+router.post('/sellerList', function (req, res, next) {
+    var query = { type: "auctioner" };
+    req.db.collection("user").find(query).toArray(function (err, result) {
+        if (err) {
+            console.log(err);
             res.json({});
+        }
         else {
             res.json(result);
         }
