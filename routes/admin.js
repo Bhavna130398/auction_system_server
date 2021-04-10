@@ -8,17 +8,18 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.post('/bidderList', function (req, res, next) {
+router.get('/bidderList', function (req, res, next) {
     req.db.collection("bidder").findOne({}, function (err, result) {
         if (err)
             res.json({});
         else {
+            console.log(result);
             res.json(result);
         }
     });
 });
 
-router.post('/sellerList', function (req, res, next) {
+router.get('/sellerList', function (req, res, next) {
     req.db.collection("seller").findOne({}, function (err, result) {
         if (err)
             res.json({});
