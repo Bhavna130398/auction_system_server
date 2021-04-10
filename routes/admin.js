@@ -29,4 +29,5 @@ router.post('/sellerList', function (req, res, next) {
 });
 
 
+
 module.exports = router;
