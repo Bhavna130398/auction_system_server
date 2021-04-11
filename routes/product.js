@@ -19,13 +19,19 @@ router.post('/addProduct', function (req, res, next) {
             res.json({ ack: false });
         }
         else {
-            console.log(r.insertedId);
-            fs.writeFile('./public/images/' + r.insertedId + ".jpeg", base64Data, 'base64', function (err) {
-                if (err) {
-                    res.json({ status: false })
-                }
-                else res.json({ status: true })
-            })
+            try {
+                fs.writeFile('./public/images/' + r.insertedId + ".jpeg", base64Data, 'base64', function (err) {
+                    if (err) {
+                        console.log(err)
+                        res.json({ status: false })
+                    }
+                    else res.json({ status: true })
+                })
+            }
+            catch (e) {
+                console.log(e);
+            }
+
         }
 
     });
