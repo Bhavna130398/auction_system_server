@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var mongodb = require('../models/mongodb')
 var ObjectID = require('mongodb').ObjectID;
 
 
@@ -13,13 +14,13 @@ router.get('/', function (req, res, next) {
 router.post('/register', function (req, res, next) {
   //var obj ={ Name: '', Email: '', Gender: '', DOB: '', Mobile_no: '', Address : '', State: '', Country: '', PinCode: '', Bidcoin : '', Date: '', IsVerified: '', Username: '', Password: '', type: ''}
   var obj = req.body;
-  req.db.collection("user").insertOne(obj, function (err, r) {
+  mongodb.insert(req, "user", obj, function (err, result) {
     if (err) {
       res.json({ ack: false });
     }
     else
       res.json({ ack: true });
-  });
+  })
 });
 
 router.post('/update', function (req, res, next) {
@@ -29,12 +30,13 @@ router.post('/update', function (req, res, next) {
     delete obj._id;
     var myquery = { _id: _id };
     var newvalues = { $set: obj };
-    req.db.collection("user").updateOne(myquery, newvalues, function (err, r) {
-      if (err)
+    mongodb.update(req, "user", myquery, newvalues, function (err, result) {
+      if (err) {
         res.json({ ack: false });
+      }
       else
         res.json({ ack: true });
-    });
+    })
   } else res.json({ ack: false });
 });
 
@@ -42,7 +44,7 @@ router.post('/update', function (req, res, next) {
 router.post('/login', function (req, res, next) {
   if (req.body.username != null && req.body.password != null) {
     var query = { username: req.body.username, password: req.body.password };
-    req.db.collection("user").findOne(query, function (err, result) {
+    mongodb.findOne(req, "user", query, function (err, result) {
       if (err)
         res.json([]);
       else {
@@ -53,7 +55,7 @@ router.post('/login', function (req, res, next) {
         } else res.json([]);
         ;
       }
-    });
+    })
   } else res.json([]);
   ;
 });
