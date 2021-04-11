@@ -10,8 +10,10 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.post('/bidderList', function (req, res, next) {
-    var query = { type: "bidder" };
+router.post('/list', function (req, res, next) {
+    // var query = { role: "bidder" };
+    var query = { role: req.body.role };
+    console.log(query);
     mongodb.find(req, "user", query, function (err, result) {
         if (err) res.json({});
         else {
@@ -21,16 +23,16 @@ router.post('/bidderList', function (req, res, next) {
     })
 });
 
-router.post('/sellerList', function (req, res, next) {
-    var query = { type: "auctioner" };
-    mongodb.find(req, "user", query, function (err, result) {
-        if (err) res.json({});
-        else {
-            console.log(result);
-            res.json(result);
-        }
-    })
-});
+// router.post('/sellerList', function (req, res, next) {
+//     var query = { role: "auctionar" };
+//     mongodb.find(req, "user", query, function (err, result) {
+//         if (err) res.json({});
+//         else {
+//             console.log(result);
+//             res.json(result);
+//         }
+//     })
+// });
 
 
 
