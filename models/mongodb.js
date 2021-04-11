@@ -1,5 +1,3 @@
-var ObjectID = require('mongodb').ObjectID;
-
 
 exports.insert = function (req, tName, data, cb) {
     req.db.collection(tName).insertOne(data, function (err, result) {
@@ -24,6 +22,20 @@ exports.findOne = function (req, tName, data, cb) {
 
 exports.find = function (req, tName, data, cb) {
     req.db.collection(tName).find(data).toArray(function (err, result) {
+        if (err) return cb(err, null)
+        else return cb(null, result)
+    });
+}
+
+exports.remove = function (req, tName, data, cb) {
+    req.db.collection(tName).remove(data, function (err, result) {
+        if (err) return cb(err, null)
+        else return cb(null, result)
+    });
+}
+
+exports.drop = function (req, tName, cb) {
+    req.db.collection(tName).drop(function (err, result) {
         if (err) return cb(err, null)
         else return cb(null, result)
     });

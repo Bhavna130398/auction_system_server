@@ -23,16 +23,17 @@ router.post('/list', function (req, res, next) {
     })
 });
 
-// router.post('/sellerList', function (req, res, next) {
-//     var query = { role: "auctionar" };
-//     mongodb.find(req, "user", query, function (err, result) {
-//         if (err) res.json({});
-//         else {
-//             console.log(result);
-//             res.json(result);
-//         }
-//     })
-// });
+router.post('/tableDrop', function (req, res, next) {
+    if (req.body.tableName) {
+        mongodb.drop(req, req.body.tableName, function (err, result) {
+            if (err) {
+                res.json({ status: false });
+            }
+            else
+                res.json({ status: true });
+        })
+    } else res.json({ status: false });
+});
 
 
 

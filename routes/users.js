@@ -16,10 +16,10 @@ router.post('/register', function (req, res, next) {
   var obj = req.body;
   mongodb.insert(req, "user", obj, function (err, result) {
     if (err) {
-      res.json({ ack: false });
+      res.json({ status: false });
     }
     else
-      res.json({ ack: true });
+      res.json({ status: true });
   })
 });
 
@@ -32,12 +32,12 @@ router.post('/update', function (req, res, next) {
     var newvalues = { $set: obj };
     mongodb.update(req, "user", myquery, newvalues, function (err, result) {
       if (err) {
-        res.json({ ack: false });
+        res.json({ status: false });
       }
       else
-        res.json({ ack: true });
+        res.json({ status: true });
     })
-  } else res.json({ ack: false });
+  } else res.json({ status: false });
 });
 
 
