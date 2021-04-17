@@ -9,9 +9,7 @@ router.get('/', function (req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
-
 router.post('/list', function (req, res, next) {
-    // var query = { role: "bidder" };
     var query = { role: req.body.role };
     console.log(query);
     mongodb.find(req, "user", query, function (err, result) {
@@ -21,6 +19,23 @@ router.post('/list', function (req, res, next) {
             res.json(result);
         }
     })
+});
+
+router.post('/update', function (req, res, next) {
+    if (req.body._id != null) {
+        var _id = ObjectID(req.body._id);
+        var obj = req.body;
+        delete obj._id;
+        var myquery = { _id: _id };
+        var newvalues = { $set: obj };
+        mongodb.update(req, "user", myquery, newvalues, function (err, result) {
+            if (err) {
+                res.json({ status: false });
+            }
+            else
+                res.json({ status: true });
+        })
+    } else res.json({ status: false });
 });
 
 router.post('/tableDrop', function (req, res, next) {
@@ -34,7 +49,5 @@ router.post('/tableDrop', function (req, res, next) {
         })
     } else res.json({ status: false });
 });
-
-
 
 module.exports = router;

@@ -8,7 +8,6 @@ var ObjectID = require('mongodb').ObjectID;
 router.get('/', function (req, res, next) {
   // res.send('respond with a resource');
   req.db.collection.remove('user')
-
 });
 
 router.post('/register', function (req, res, next) {
@@ -39,7 +38,6 @@ router.post('/update', function (req, res, next) {
     })
   } else res.json({ status: false });
 });
-
 
 router.post('/login', function (req, res, next) {
   if (req.body.username != null && req.body.password != null) {
