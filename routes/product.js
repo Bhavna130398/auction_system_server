@@ -15,7 +15,7 @@ router.post('/addProduct', function (req, res, next) {
     base64Data = body.replace(/^data:image\/jpeg;base64,/, "");
     delete req.body.image
     var obj = req.body;
-    mongodb.insert(req, "product1", obj, function (err, r) {
+    mongodb.insert(req, "product", obj, function (err, r) {
         if (err) {
             res.json({ status: false });
         }
@@ -81,6 +81,7 @@ router.post('/removeProduct', function (req, res, next) {
 
 router.post('/listProduct', function (req, res, next) {
     if (req.body.role != null && req.body._id != null) {
+        var query = {}
         if (req.body.role == 'auctionar') {
             query['Auctioner_Id'] = req.body._id
         }
