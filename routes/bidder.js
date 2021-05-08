@@ -2,11 +2,6 @@ var express = require('express');
 var router = express.Router();
 var ObjectID = require('mongodb').ObjectID;
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express' });
-});
-
 router.post('/add', function (req, res, next) {
     var obj = req.body;
     req.db.collection("bidder").insertOne(obj, function (err, r) {
@@ -33,4 +28,5 @@ router.post('/update', function (req, res, next) {
         });
     } else res.json({ ack: false });
 });
+
 module.exports = router;

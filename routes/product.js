@@ -87,7 +87,6 @@ router.post('/listProduct', function (req, res, next) {
         }
         mongodb.find(req, "product", query, function (err, result) {
             if (err) {
-                console.log(err);
                 res.json([]);
             }
             else
@@ -96,6 +95,5 @@ router.post('/listProduct', function (req, res, next) {
         })
     } else res.json([]);
 });
-
 
 module.exports = router;

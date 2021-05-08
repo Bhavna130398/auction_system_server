@@ -11,11 +11,9 @@ router.get('/', function (req, res, next) {
 
 router.post('/list', function (req, res, next) {
     var query = { role: req.body.role };
-    console.log(query);
     mongodb.find(req, "user", query, function (err, result) {
         if (err) res.json({});
         else {
-            console.log(result);
             res.json(result);
         }
     })
@@ -33,7 +31,7 @@ router.post('/update', function (req, res, next) {
                 res.json({ status: false });
             }
             else
-                res.json({ status: true });
+                res.json({ status: true, isVerified: req.body.isVerified });
         })
     } else res.json({ status: false });
 });

@@ -33,4 +33,5 @@ router.post('/update', function (req, res, next) {
         });
     } else res.json({ ack: false });
 });
+
 module.exports = router;

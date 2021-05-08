@@ -55,7 +55,6 @@ router.post('/login', function (req, res, next) {
       }
     })
   } else res.json([]);
-  ;
 });
 
 module.exports = router;
