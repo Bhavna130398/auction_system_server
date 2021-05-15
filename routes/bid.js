@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var ObjectID = require('mongodb').ObjectID;
 var mongodb = require('../models/mongodb');
+var moment = require('moment');
+var _ = require('underscore');
 
 
 router.get('/', function (req, res, next) {
@@ -10,6 +12,9 @@ router.get('/', function (req, res, next) {
 
 router.post('/bid', function (req, res, next) {
     var obj = req.body;
+    var date = new Date()
+    obj.date = moment(date, 'YYYY-MM-DD').format("DD-MM-YYYY")
+    obj.time = moment(date, 'YYYY-MM-DD HH:mm:ss').format("h:mm A")
     req.db.collection("bid").insertOne(obj, function (err, r) {
         if (err) {
             res.json({ ack: false });
@@ -58,5 +63,16 @@ router.post('/productBid', function (req, res, next) {
         }
     })
 });
+
+router.post('/bidListByDate', function (req, res, next) {
+    mongodb.find(req, "bid", {}, function (err, result) {
+        if (err) res.json({});
+        else {
+            result = _.groupBy(result, 'date')
+            res.json(result);
+        }
+
+    })
+})
 
 module.exports = router;

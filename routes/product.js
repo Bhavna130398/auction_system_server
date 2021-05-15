@@ -80,35 +80,32 @@ router.post('/removeProduct', function (req, res, next) {
 });
 
 router.post('/listProduct', function (req, res, next) {
-    if (req.body.role != null && req.body._id != null) {
-        req.db.collection('bid').aggregate([{
-            $group:
-                { _id: "$product_id", bid: { $max: "$bid" } }
-        }]).toArray(function (err, res1) {
-            var bidObj = {}
-            res1.forEach(element => {
-                bidObj[element['_id']] = element['bid']
-            });
-            var query = {}
-            if (req.body.role == 'auctionar') {
-                query['Auctioner_Id'] = req.body._id
+    // if (req.body.role != null && req.body._id != null) {
+    req.db.collection('bid').aggregate([{
+        $group:
+            { _id: "$P_id", bid: { $max: "$bid" } }
+    }]).toArray(function (err, res1) {
+        var bidObj = {}
+        res1.forEach(element => {
+            bidObj[element['_id']] = element['bid']
+        });
+        var query = {}
+        if (req.body.role == 'auctionar') {
+            query['Auctioner_Id'] = req.body._id
+        }
+        mongodb.find(req, "product", query, function (err, result) {
+            if (err) {
+                res.json([]);
             }
-            mongodb.find(req, "product", query, function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.json([]);
-                }
-                else
-                    result.forEach(element => {
-                        console.log(bidObj[element['_id']]);
-                        element.bid = bidObj[element['_id']] ? bidObj[element['_id']] : 0;
-                    });
-                console.log(result);
-                res.json(result);
+            else
+                result.forEach(element => {
+                    element.bid = bidObj[element['_id']] ? bidObj[element['_id']] : 0;
+                });
+            res.json(result);
 
-            })
         })
-    } else res.json([]);
+    })
+    // } else res.json([]);
 });
 
 
