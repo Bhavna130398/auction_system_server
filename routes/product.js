@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var ObjectID = require('mongodb').ObjectID;
 var fs = require('fs');
+var moment = require('moment');
 var mongodb = require('../models/mongodb')
 
 
@@ -11,10 +12,14 @@ router.get('/', function (req, res, next) {
 
 
 router.post('/addProduct', function (req, res, next) {
+
+    var date = new Date();
     var body = req.body.image;
     base64Data = body.replace(/^data:image\/jpeg;base64,/, "");
     delete req.body.image
     var obj = req.body;
+    obj.bidEndDate = moment(date, 'YYYY-MM-DD').add(2, 'days').format("DD-MM-YYYY");
+
     mongodb.insert(req, "product", obj, function (err, r) {
         if (err) {
             res.json({ status: false });
