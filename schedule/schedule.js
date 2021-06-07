@@ -6,8 +6,6 @@ var ObjectID = require('mongodb').ObjectID;
 var MongoClient = require('mongodb').MongoClient;
 var moment = require('moment');
 
-
-
 var app = express();
 app.set('port', 1111);
 app.use('/schedule', express.static('../schedule'));
@@ -16,12 +14,12 @@ app.use(expressMongoDb('mongodb://localhost/auctionDB'));
 var cron = schedule.scheduleJob('0 0 19 * * *', function () {
     console.log("\n ********************************************************************************************************\n");
     console.log(moment(new Date(), 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY HH:mm'));
-    updateBid();
+    // updateBid();
 });
 
 var cronserver = http.createServer(app).listen(app.get('port'), function (err) {
     console.log('Cron server listening on port ' + app.get('port'));
-    // updateBid();
+    updateBid();
 });
 
 function updateBid() {
@@ -47,7 +45,8 @@ function updateBid() {
 
 }
 function productList(next) {
-    var currentdate = moment(new Date(), 'YYYY-MM-DD').format("DD-MM-YYYY");
+    // var currentdate = moment(new Date(), 'YYYY-MM-DD').format("DD-MM-YYYY");
+    var currentdate = moment('2021-06-01', 'YYYY-MM-DD').format("DD-MM-YYYY");
     MongoClient.connect('mongodb://localhost/auctionDB', function (err, client) {
         if (err) next(err, null);
         var db = client.db('auctionDB');
@@ -55,6 +54,7 @@ function productList(next) {
         db.collection('product').find(query).toArray(function (err, result) {
             if (err) next(err, null);
             else {
+                console.log(result);
                 next(null, result);
             }
 
@@ -66,21 +66,22 @@ function getBidData(value) {
     MongoClient.connect('mongodb://localhost/auctionDB', function (err, client) {
         if (err) return 1
         var db = client.db('auctionDB');
-        db.collection('bid').find({ P_id: value._id.toString }).sort({ bidAmount: -1 }).limit(1).toArray(function (err, result) {
+        db.collection('bid').find({ P_id: value._id.toString() }).sort({ bidAmount: -1 }).limit(1).toArray(function (err, result) {
             console.log(result[0]);
             if (err) return 1
 
             else {
-                var obj = { sold: true }
+                var obj = { sold: true, bidder_id: result[0].U_id }
                 var myquery = { _id: ObjectID(result[0].P_id) };
                 var newvalues = { $set: obj };
+
                 db.collection("product").updateOne(myquery, newvalues, function (producterr, r) {
-                    if (producterr) return 1
+                    if (producterr) { console.log(producterr); return 1 }
                 });
                 var userMyquery = { _id: ObjectID(result[0].U_id) };
-                var userNewvalues = { $inc: { bidcoin: result[0].bidAmount } };
-                db.collection("user").updateOne(userMyquery, userNewvalues, function (producterr, r) {
-                    if (producterr) return 1
+                var userNewvalues = { $inc: { bidcoin: -result[0].bidAmount } };
+                db.collection("user").updateOne(userMyquery, userNewvalues, function (producterr1, r1) {
+                    if (producterr1) { console.log(producterr1); return 1 }
                 });
             }
         })
