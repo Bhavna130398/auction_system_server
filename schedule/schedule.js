@@ -45,8 +45,8 @@ function updateBid() {
 
 }
 function productList(next) {
-    // var currentdate = moment(new Date(), 'YYYY-MM-DD').format("DD-MM-YYYY");
-    var currentdate = moment('2021-06-01', 'YYYY-MM-DD').format("DD-MM-YYYY");
+    var currentdate = moment(new Date(), 'YYYY-MM-DD').format("DD-MM-YYYY");
+    // var currentdate = moment('2021-06-01', 'YYYY-MM-DD').format("DD-MM-YYYY");
     MongoClient.connect('mongodb://localhost/auctionDB', function (err, client) {
         if (err) next(err, null);
         var db = client.db('auctionDB');

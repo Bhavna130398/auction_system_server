@@ -20,7 +20,7 @@ router.post('/bid', function (req, res, next) {
             res.json({ ack: false });
         }
         else
-            res.json({ ack: true });
+            res.json({ ack: true, data: obj });
     });
 });
 
@@ -73,6 +73,49 @@ router.post('/bidListByDate', function (req, res, next) {
         }
 
     })
+})
+
+router.post('/getBids', function (req, res, next) {
+    var userObj = {}
+    var productObj = {}
+    mongodb.find(req, "product", {}, function (perr, presult) {
+        if (perr) res.json({});
+        else {
+            console.log(presult);
+
+            presult.forEach(element => {
+                productObj[element._id] = element;
+            });
+
+            mongodb.find(req, "user", {}, function (err, result) {
+                if (err) res.json({});
+                else {
+                    result.forEach(element => {
+                        userObj[element._id] = element;
+                    });
+                    mongodb.find(req, "bid", {}, function (Biderr, Bidresult) {
+                        if (Biderr) res.json({});
+                        else {
+
+                            Bidresult.forEach(element => {
+                                if (userObj[element.u_id]) {
+                                    element['name'] = userObj[element.u_id].name
+                                }
+                                if (productObj[element.p_id]) {
+                                    element['productname'] = productObj[element.p_id].productname
+                                }
+
+                            });
+                            res.json(Bidresult);
+                        }
+                        // console.log(result);
+                        // res.json(result);
+                    })
+                }
+
+            })
+        };
+    });
 })
 
 module.exports = router;
